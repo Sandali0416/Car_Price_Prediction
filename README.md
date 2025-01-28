@@ -1,4 +1,7 @@
-# **Car Price Prediction Model 🏎️**
+# **Car Price Prediction Model 🏎️
+<div align="center">
+  <img align="riight" width="" src="" style="border-radius: 10px; margin: 10px;">
+</div>**
 
 ## **Project Overview**
 Predict the prices of used cars with precision using **Random Forest Regression**. This machine learning project takes into account a range of important car features to provide accurate pricing predictions.
