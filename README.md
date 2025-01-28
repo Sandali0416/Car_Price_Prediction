@@ -1,126 +1,73 @@
-# Car Price Prediction using Random Forest
-This script performs car price prediction using Random Forest Regressor.
-It includes data loading, feature engineering, model training, evaluation,
-saving the model, and making predictions on unseen data.
+# **Car Price Prediction Model 🏎️**
 
-## 1. Import Required Libraries
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, r2_score
-import matplotlib.pyplot as plt
-import pickle
-import os
+## **Project Overview**
+Predict the prices of used cars with precision using **Random Forest Regression**. This machine learning project takes into account a range of important car features to provide accurate pricing predictions.
 
-## 2. Load the Dataset
- Specify the path to your dataset
-file_path = r"/content/car data.csv"  # Replace with your dataset file path
+---
 
- Load dataset into pandas dataframe
-data = pd.read_csv(file_path)
+## **Key Features**
+- **Accurate Price Prediction**: Leverages advanced machine learning techniques for reliable predictions.
+- **Random Forest Regressor**: Utilizes a powerful ensemble model for superior results.
+- **Data Preprocessing & Feature Engineering**: Prepares and transforms raw data for optimal model performance.
 
-Display the first 5 rows and dataset information
-print("First 5 rows of the dataset:")
-print(data.head())
-print("\nDataset Information:")
-print(data.info())
+---
 
-## 3. Feature Engineering
-Calculate the car's age by subtracting the year of manufacture from the current year
-current_year = 2025
-data['Age'] = current_year - data['Year']
+## **Dataset Details**
+- **Source**: [Used Car Dataset on Kaggle](https://www.kaggle.com/datasets/vijayaadithyanvg/car-price-predictionused-cars)
+- **Key Features**:
+  - **Present Price**: Current market value of the car
+  - **Kilometers Driven**: Total distance covered by the car
+  - **Car Age**: Age of the car in years
+  - **Fuel Type**: Type of fuel the car uses
+  - **Transmission**: Whether the car has automatic or manual transmission
+  - **Ownership**: Number of previous owners
 
-Drop irrelevant columns: 'Year' and 'Car_Name'
-data = data.drop(['Year', 'Car_Name'], axis=1)
+---
 
-Convert categorical variables into numeric using one-hot encoding
-data = pd.get_dummies(data, columns=['Fuel_Type', 'Selling_type', 'Transmission'], drop_first=True)
-## 4. Define Features and Target Variable
- X contains the feature variables
- y contains the target variable (Selling_Price)
-X = data.drop(['Selling_Price'], axis=1)
-y = data['Selling_Price']
+## **Libraries Used** 
+- **pandas**: For data manipulation and analysis
+- **numpy**: For numerical computing
+- **scikit-learn**: For implementing machine learning algorithms
+- **matplotlib**: For visualizing results
+- **pickle**: For saving and loading models
 
-## 5. Train-Test Split
- Split the dataset into training (80%) and testing (20%) sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+---
 
-## 6. Train Random Forest Model
- Instantiate and train a Random Forest Regressor model
-rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
+## **Key Steps in the Project**
+1. **Data Preprocessing**: Clean and prepare the dataset for model training.
+2. **Feature Engineering**: Create new features to improve model performance.
+3. **Model Training**: Train the model using the Random Forest algorithm.
+4. **Model Evaluation**: Assess model performance using various metrics.
+5. **Model Saving & Loading**: Save the trained model for future use.
 
- Predict the target variable on the test set
-rf_y_pred = rf_model.predict(X_test)
+---
 
-## 7. Save the Model using Pickle
-Specify the directory to save the model
-models_dir = r"C:\Users\TEMP\Desktop\New folder"
-if not os.path.exists(models_dir):
-    os.makedirs(models_dir)
+## **Performance Metrics**
+- **Mean Absolute Error (MAE)**: Measures the average magnitude of errors in predictions.
+- **R-squared (R²) Score**: Indicates how well the model explains the variance in the data.
 
- Define the path to save the trained Random Forest model
-rf_model_path = os.path.join(models_dir, "random_forest_model.pkl")
+---
 
- Save the trained model as a pickle file
-with open(rf_model_path, 'wb') as f:
-    pickle.dump(rf_model, f)
+## **Model Details**
+- **Algorithm**: Random Forest Regression
+- **Hyperparameters**: 100 estimators
+- **Random State**: 42 (for reproducibility)
+- **Test Size**: 20% of the data
 
-print(f"\nRandom Forest Model saved successfully: {rf_model_path}")
+---
 
-## 8. Evaluate Model Performance
- Calculate performance metrics: Mean Absolute Error and R-squared
-rf_mae = mean_absolute_error(y_test, rf_y_pred)
-rf_r2 = r2_score(y_test, rf_y_pred)
+## **Visualization**
+- **Actual vs Predicted Price**: Visualize the correlation between actual and predicted car prices with a scatter plot.
 
- Print model evaluation metrics
-print("\nRandom Forest Model Performance:")
-print(f"Mean Absolute Error: {rf_mae}")
-print(f"R-squared: {rf_r2}")
+---
 
-## 9. Visualize Predictions
- Create a scatter plot to visualize actual vs predicted prices
-plt.figure(figsize=(8, 6))
-plt.scatter(y_test, rf_y_pred, alpha=0.5, color='green')
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2, color='red')
-plt.xlabel('Actual Selling Price')
-plt.ylabel('Predicted Selling Price')
-plt.title('Random Forest: Actual vs Predicted')
+## **Future Improvements**
+- **Hyperparameter Tuning**: Fine-tune the model for better performance.
+- **Explore Other Algorithms**: Try other machine learning models for comparison.
+- **Diverse Data Collection**: Gather more varied data to improve accuracy.
 
- Display R² score on the plot
-plt.text(0.05, 0.95, f"R²: {rf_r2:.2f}", fontsize=12, transform=plt.gca().transAxes, color='black', bbox=dict(facecolor='white', edgecolor='green'))
+---
 
- Show the plot
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-
-## 10. Example: Load the Trained Model and Make Predictions
- Load the saved model from the pickle file
-with open(rf_model_path, 'rb') as f:
-    loaded_rf_model = pickle.load(f)
-
- Predict the Selling Price using the loaded model on the first test example
-print("\nTesting loaded Random Forest model:")
-print(f"Random Forest Prediction (First Test Example): {loaded_rf_model.predict([X_test.iloc[0]])[0]}")
-
-## 11. Predict on Unseen Data
- Create a DataFrame with new, unseen data for prediction
-unseen_data = pd.DataFrame({
-    'Present_Price': [5.59, 9.54],
-    'Driven_kms': [27000, 43000],  # Changed to 'Driven_kms'
-    'Owner': [0, 0],
-    'Age': [10, 8],  # Assuming current year is 2025
-    'Fuel_Type_Diesel': [0, 1],
-    'Fuel_Type_Petrol': [1, 0],
-    'Selling_type_Individual': [0, 0],  # Assuming Dealer (1) or Individual (0)
-    'Transmission_Manual': [1, 0]
-})
-
- Predict the selling price using the loaded model
-unseen_predictions = loaded_rf_model.predict(unseen_data)
-
- Print the predictions for unseen data
-for i, prediction in enumerate(unseen_predictions):
-    print(f"Unseen Data Example {i+1}: Predicted Selling Price: {prediction}")
+## **Contact**
+For inquiries, feel free to reach out to:  
+📧 **Email**: [subagya0416@gmail.com](mailto:subagya0416@gmail.com)
